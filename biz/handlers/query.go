@@ -12,8 +12,8 @@ type GetCarRequest struct {
 	LowPrice           int64  `form:"low_price" json:"low_price"`
 	HighPrice          int64  `form:"high_price" json:"high_price"`
 	Brand              string `form:"brand" json:"brand"`
-	LowProductionYear  int64  `brand:"low_production_year" json:"low_production_year"`
-	HighProductionYear int64  `brand:"high_production_year" json:"high_production_year"`
+	LowProductionYear  int64  `form:"low_production_year" json:"low_production_year"`
+	HighProductionYear int64  `form:"high_production_year" json:"high_production_year"`
 }
 
 type GetCarResponse struct {
@@ -22,7 +22,7 @@ type GetCarResponse struct {
 
 /*
 Sample:
-curl --location --request POST 'http://localhost:5000/get_cars' \
+curl --location --request POST 'http://44.202.253.122:5000/get_cars' \
 --form 'model="wangxin"' \
 --form 'low_price="30"'
 */

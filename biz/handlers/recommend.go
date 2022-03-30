@@ -17,7 +17,7 @@ type RecommendCarsResponse struct {
 
 /*
 Sample:
-curl --location --request POST 'http://localhost:5000/recommend_cars' \
+curl --location --request POST 'http://44.202.253.122:5000/recommend_cars' \
 --form 'id="1024"'
 */
 

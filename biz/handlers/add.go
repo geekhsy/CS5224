@@ -16,7 +16,7 @@ type AddCarResponse struct {
 
 /*
 Sample:
-curl --location --request POST 'http://localhost:5000/add_cars' \
+curl --location --request POST 'http://44.202.253.122:5000/add_cars' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "cars": [
