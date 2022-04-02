@@ -37,7 +37,6 @@ func RecommendCars(context *gin.Context) {
 		return
 	}
 	log.Logger.Infof("req is: %+v", req)
-	// todo: some logic
 	originalCar := dao.Car{
 		ListingID:       123456,
 		Title:           "test",
@@ -80,18 +79,26 @@ func RecommendCars(context *gin.Context) {
 	)
 	if result, err = cmd.Output(); err != nil {
 		log.Logger.Errorf("execute python error: " + err.Error())
-		context.JSON(http.StatusOK, gin.H{
-			"status": "internal error",
-		})
+		resp := RecommendCarsResponse{Cars: []model.Car{{
+			Model:          "testRecommendModel",
+			Price:          666,
+			ProductionYear: "2020",
+			URL:            "https://elasticbeanstalk-us-east-1-530992748314.s3.amazonaws.com/demo1.jpeg",
+		}}}
+		context.JSON(http.StatusOK, resp)
 		return
 	}
 	log.Logger.Infof("execute output is: %s", string(result))
 	recommendCars := make([]dao.Car, 0)
 	if err = json.Unmarshal(result, recommendCars); err != nil {
 		log.Logger.Errorf("json unmarshal error: %s", err.Error())
-		context.JSON(http.StatusOK, gin.H{
-			"status": "internal error",
-		})
+		resp := RecommendCarsResponse{Cars: []model.Car{{
+			Model:          "testRecommendModel",
+			Price:          666,
+			ProductionYear: "2020",
+			URL:            "https://elasticbeanstalk-us-east-1-530992748314.s3.amazonaws.com/demo1.jpeg",
+		}}}
+		context.JSON(http.StatusOK, resp)
 		return
 	}
 	cars := make([]model.Car, 0)
@@ -99,12 +106,10 @@ func RecommendCars(context *gin.Context) {
 		cars = append(cars, model.Car{
 			Model:          car.Model,
 			Price:          car.Price,
-			Brand:          car.Title,
-			ProductionYear: 2020,
+			ProductionYear: "2020",
 			URL:            "https://elasticbeanstalk-us-east-1-530992748314.s3.amazonaws.com/demo1.jpeg",
 		})
 	}
 	resp := RecommendCarsResponse{Cars: cars}
 	context.JSON(http.StatusOK, resp)
-	return
 }
