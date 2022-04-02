@@ -1,4 +1,4 @@
-package dto
+package dao
 
 type Car struct {
 	ListingID       int    `db:"listing_id"`

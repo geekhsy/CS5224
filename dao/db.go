@@ -1,4 +1,4 @@
-package dto
+package dao
 
 import (
 	"CS5224/pkg/log"
@@ -24,7 +24,7 @@ type RDS struct {
 	db *sqlx.DB
 }
 
-func ConnectDB() {
+func InitDB() {
 	dbEndpoint := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", username, password, dbHost, dbPort, dbName)
 	fmt.Println(dbEndpoint)
 	db, err := sqlx.Open("mysql", dbEndpoint)
@@ -45,7 +45,7 @@ func GetCarByID(id int) Car {
 }
 
 func SearchCar(params CarParams) []Car {
-	cars := []Car{}
+	cars := make([]Car, 0)
 	query := "select * from car where 1=1"
 	if len(params.Title) > 0 {
 		query += fmt.Sprintf(" and title like \"%%%v%%\"", params.Title)
@@ -74,7 +74,7 @@ func SearchCar(params CarParams) []Car {
 	// query += " limit 1;"
 	err := rds.db.Select(&cars, query)
 	if err != nil {
-		log.Logger.Info("Query failed : %s, err: %v", query, err)
+		log.Logger.Errorf("Query failed : %s, err: %v", query, err)
 	}
 	return formatCars(cars)
 }
@@ -89,7 +89,7 @@ func formatCar(target Car) Car {
 }
 
 func formatCars(target []Car) []Car {
-	res := []Car{}
+	res := make([]Car, 0)
 	for _, car := range target {
 		res = append(res, formatCar(car))
 	}
