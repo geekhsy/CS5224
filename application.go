@@ -2,7 +2,7 @@ package main
 
 import (
 	"CS5224/biz"
-	"CS5224/dto"
+	"CS5224/dao"
 	"CS5224/pkg/log"
 
 	"github.com/gin-gonic/gin"
@@ -11,8 +11,7 @@ import (
 func main() {
 
 	log.Logger.Info("Hello World")
-
-	dto.ConnectDB()
+	dao.InitDB()
 
 	router := gin.Default()
 	biz.RegisterRouters(router)
