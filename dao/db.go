@@ -50,7 +50,7 @@ func InsertCar(car *Car) error {
 		" transmission, mileage, features, indicative_price, price) values (%v, %v, %v, %v, %v, %v, %v, %v, %v, %v)",
 		car.ListingID, car.Title, car.Model, car.Description, car.OriginalRegDate,
 		car.Transmission, car.Mileage, car.Features, car.IndicativePrice, car.Price)
-	if res, err := rds.db.Exec(query); !res || err != nil {
+	if _, err := rds.db.Exec(query); err != nil {
 		log.Logger.Info("Query failed : %s, err: %v", query, err)
 		return err
 	}
