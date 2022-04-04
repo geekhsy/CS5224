@@ -18,4 +18,5 @@ func RegisterRouters(router *gin.Engine) {
 	router.POST("/get_cars", handlers.GetCars)
 	router.POST("/add_cars", handlers.AddCars)
 	router.POST("/recommend_cars", handlers.RecommendCars)
+	router.POST("/evaluate_car", handlers.EvaluateCar)
 }

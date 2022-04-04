@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
+# import seaborn as sns
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from transformers import AutoTokenizer, AutoModel
@@ -206,7 +206,7 @@ if __name__ == '__main__':
 
     
     recommend_result = recommend(sys.argv[1],int(sys.argv[2]))
-    print("The result is:\n", recommend_result)
+    # print("The result is:\n", recommend_result)
     result_json = recommend_result.to_json(orient="records")
-    print('json',result_json)
+    print(result_json)
     # sys.exit(recommend_result)

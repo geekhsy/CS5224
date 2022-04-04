@@ -44,7 +44,7 @@ func GetCars(context *gin.Context) {
 		Price:          666,
 		Brand:          "testAddBrand",
 		ProductionYear: 2020,
-		URL:            "www.google.com",
+		URL:            "https://elasticbeanstalk-us-east-1-530992748314.s3.amazonaws.com/demo1.jpeg",
 	}}}
 	context.JSON(http.StatusOK, resp)
 	return
