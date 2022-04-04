@@ -2,18 +2,20 @@ package handlers
 
 import (
 	"CS5224/biz/model"
+	"CS5224/dao"
 	"CS5224/pkg/log"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 type GetCarRequest struct {
-	Model              string `form:"model" json:"model"`
-	LowPrice           int64  `form:"low_price" json:"low_price"`
-	HighPrice          int64  `form:"high_price" json:"high_price"`
-	Brand              string `form:"brand" json:"brand"`
-	LowProductionYear  int64  `form:"low_production_year" json:"low_production_year"`
-	HighProductionYear int64  `form:"high_production_year" json:"high_production_year"`
+	Title           string `json:"title,omitempty" form:"title"`
+	ManufacturedMax int    `json:"manufactured_max,omitempty" form:"manufactured_max"`
+	ManufacturedMin int    `json:"manufactured_min,omitempty" form:"manufactured_min"`
+	TypeOfVehicle   string `json:"type_of_vehicle,omitempty" form:"type_of_vehicle"`
+	Transmission    string `json:"transmission,omitempty" form:"transmission"`
+	PriceMax        int    `json:"price_max,omitempty" form:"price_max"`
+	PriceMin        int    `json:"price_min,omitempty" form:"price_min"`
 }
 
 type GetCarResponse struct {
@@ -22,9 +24,9 @@ type GetCarResponse struct {
 
 /*
 Sample:
-curl --location --request POST 'http://44.202.253.122:5000/get_cars' \
---form 'model="wangxin"' \
---form 'low_price="30"'
+curl --location --request POST 'http://localhost:5000/get_cars' \
+--form 'title="volvo"' \
+--form 'price_min="30"'
 */
 
 func GetCars(context *gin.Context) {
@@ -38,14 +40,39 @@ func GetCars(context *gin.Context) {
 		return
 	}
 	log.Logger.Infof("req is: %+v", req)
-	// todo: some logic
-	resp := GetCarResponse{Cars: []model.Car{{
-		Model:          "testAddModel",
-		Price:          666,
-		Brand:          "testAddBrand",
-		ProductionYear: 2020,
-		URL:            "www.google.com",
-	}}}
+	carParams := dao.CarParams{
+		Title:           req.Title,
+		ManufacturedMax: req.ManufacturedMax,
+		ManufacturedMin: req.ManufacturedMin,
+		TypeOfVehicle:   req.TypeOfVehicle,
+		Transmission:    dao.TransmissionTypeEnum(req.Transmission),
+		PriceMax:        req.PriceMax,
+		PriceMin:        req.PriceMin,
+		OrderBy:         "price",
+	}
+	cars := make([]model.Car, 0)
+	if results, err := dao.SearchCar(&carParams); err != nil {
+		cars = append(cars, model.Car{
+			Title:          "dks",
+			Model:          "dks",
+			Price:          66666,
+			Mileage:        100,
+			ProductionYear: "2022",
+			URL:            "https://elasticbeanstalk-us-east-1-530992748314.s3.amazonaws.com/demo1.jpeg",
+		})
+	} else {
+		for _, result := range results {
+			cars = append(cars, model.Car{
+				Title:          result.Title,
+				Model:          result.Model,
+				Price:          result.Price,
+				Mileage:        result.Mileage,
+				ProductionYear: result.Manufactured,
+				URL:            "https://elasticbeanstalk-us-east-1-530992748314.s3.amazonaws.com/demo1.jpeg",
+			})
+		}
+	}
+	resp := GetCarResponse{Cars: cars}
 	context.JSON(http.StatusOK, resp)
 	return
 }

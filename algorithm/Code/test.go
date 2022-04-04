@@ -15,7 +15,7 @@ type xtest struct {
 	Description       string  `json:"description"`
 	Manufactured      float64 `json:"manufactured"`
 	Original_reg_date string  `json:"original_reg_date"`
-	Reg_date          float64 `json:"reg_date"`
+	Reg_date          string  `json:"reg_date"`
 	Type_of_vehicle   string  `json:"type_of_vehicle"`
 	Category          string  `json:"category"`
 	Transmission      string  `json:"transmission"`
@@ -39,7 +39,7 @@ type xtest struct {
 	Indicative_price  float32 `json:"indicative_price"`
 }
 
-func StructToJson(data xtest) string {
+func StructToJson(data interface{}) string {
 	jsons, errs := json.Marshal(data)
 	if errs != nil {
 		fmt.Println(errs.Error())
@@ -58,7 +58,7 @@ func main() {
 		Description:       "ownerconsignmentunit, viewingstrictlybyappostringmentonly. pristineconditionwithlotsof upgradesdone. viewtobelieve!optiontopurchasewithout coe. flexible loan solutions! call/whatsapp our sales consultant now to arrange for a viewing before it's gone!",
 		Manufactured:      2012,
 		Original_reg_date: "",
-		Reg_date:          2012 / 6 / 27,
+		Reg_date:          "2012-6-27",
 		Type_of_vehicle:   "suv",
 		Category:          "",
 		Transmission:      "",
@@ -86,33 +86,37 @@ func main() {
 	// fmt.Printf("TYPE: %T VALUE: %v\n", xdata, xdata)
 	xdata = strings.Replace(xdata, "'", "", -1)
 
-	var price []byte
-	var result []byte
-	var err error
-	var cmd *exec.Cmd
-
 	// predict
-	predict_cmd := fmt.Sprintf("python 5224test.py '%s'", xdata)
+	predict_cmd := fmt.Sprintf("cd algorithm/Code/ && python3 5224test.py '%s' ", xdata)
 	fmt.Println("str = " + predict_cmd)
 	// fmt.Println("xdata" + xdata)
 	// cmd = exec.Command("powershell", str)
-	cmd = exec.Command("cmd", "-c", predict_cmd)
-	if price, err = cmd.Output(); err != nil {
+	cmd := exec.Command("bash", "-c", predict_cmd)
+	price, err := cmd.Output()
+	if err != nil {
 		fmt.Println("err: " + err.Error())
 	}
 	fmt.Println("The price is", string(price))
-
 	//recommend
-	recommend_cmd := fmt.Sprintf("python 5224rectest.py '%s'", xdata)
-	fmt.Println("str = " + recommend_cmd)
-	// fmt.Println("xdata" + xdata)
-	// cmd = exec.Command("powershell", str)
-	cmd = exec.Command("cmd", "-c", recommend_cmd)
-	if result, err = cmd.Output(); err != nil {
-		fmt.Println("err: " + err.Error())
-	}
-	fmt.Println("The result is", result)
-
+	//recommend_cmd := fmt.Sprintf("python3 5224rectest.py '%s' 5", xdata)
+	//fmt.Println("str = " + recommend_cmd)
+	//// fmt.Println("xdata" + xdata)
+	//// cmd = exec.Command("powershell", str)
+	//cmd = exec.Command("bash", "-c", recommend_cmd)
+	//result, err := cmd.Output()
+	//if err != nil {
+	//	fmt.Println("err: " + err.Error())
+	//}
+	//cars := make([]xtest, 0)
+	//
+	//fmt.Println("The result is: ", string(result))
+	//fmt.Println("------------------------------")
+	//err = json.Unmarshal(result, &cars)
+	//if err != nil {
+	//	fmt.Printf("error is: %s", err.Error())
+	//} else {
+	//	fmt.Printf("cars are: %+v", cars)
+	//}
 }
 
 // '{\"listing_id\":123456,\"title\":\"test\",\"make\":\"\",\"model\":\"\",\"description\":\"ownerconsignmentunit,viewingstrictlybyappostringmentonly.pristineconditionwithlotsofupgradesdone.viewtobelieve!optiontopurchasewithoutcoe.flexibleloansolutions!call/whatsappoursalesconsultantnowtoarrangeforaviewingbeforeitsgone!\",\"manufactured\":2012,\"original_reg_date\":\"\",\"reg_date\":12,\"type_of_vehicle\":\"suv\",\"category\":\"\",\"transmission\":\"\",\"curb_weight\":0,\"power\":0,\"fuel_type\":\"\",\"engine_cap\":0,\"no_of_owners\":1,\"depreciation\":0,\"coe\":0,\"road_tax\":0,\"dereg_value\":0,\"mileage\":0,\"omv\":0,\"arf\":0,\"opc_scheme\":\"\",\"lifespan\":\"\",\"eco_category\":\"\",\"features\":\"smoothinline63.0lturbon55engine,highspecificationunit.viewspecsofthebmwx6\",\"accessories\":\"20''staggeredmrims,carbonsteeringwheel,10''andriodheadunit,hamannwidebodykit,kwcoilover,bmstuned.\",\"indicative_price\":0}'

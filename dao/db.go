@@ -11,7 +11,7 @@ import (
 const (
 	username = "admin"
 	password = "admin666"
-	dbHost   = "database-1.ckjwoo2qi594.us-east-1.rds.amazonaws.com"
+	dbHost   = "database-2.ckzihnf4uip0.us-east-1.rds.amazonaws.com"
 	dbPort   = 3306
 	dbName   = "carguru"
 )
@@ -26,9 +26,10 @@ type RDS struct {
 
 func InitDB() {
 	dbEndpoint := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", username, password, dbHost, dbPort, dbName)
-	fmt.Println(dbEndpoint)
+	log.Logger.Infof(dbEndpoint)
 	db, err := sqlx.Open("mysql", dbEndpoint)
 	if err != nil {
+		log.Logger.Errorf("init db error: %+v", err)
 		panic(err)
 	}
 	rds.db = db
@@ -44,7 +45,19 @@ func GetCarByID(id int) Car {
 	return formatCar(car)
 }
 
-func SearchCar(params CarParams) []Car {
+func InsertCar(car *Car) error {
+	query := fmt.Sprintf("insert into car (listing_id, title, model, description, original_reg_date,"+
+		" transmission, mileage, features, indicative_price, price) values (%v, %v, %v, %v, %v, %v, %v, %v, %v, %v)",
+		car.ListingID, car.Title, car.Model, car.Description, car.OriginalRegDate,
+		car.Transmission, car.Mileage, car.Features, car.IndicativePrice, car.Price)
+	if _, err := rds.db.Exec(query); err != nil {
+		log.Logger.Info("Query failed : %s, err: %v", query, err)
+		return err
+	}
+	return nil
+}
+
+func SearchCar(params *CarParams) ([]Car, error) {
 	cars := make([]Car, 0)
 	query := "select * from car where 1=1"
 	if len(params.Title) > 0 {
@@ -72,11 +85,11 @@ func SearchCar(params CarParams) []Car {
 		query += fmt.Sprintf(" order by %v", params.OrderBy)
 	}
 	// query += " limit 1;"
-	err := rds.db.Select(&cars, query)
-	if err != nil {
+	if err := rds.db.Select(&cars, query); err != nil {
 		log.Logger.Errorf("Query failed : %s, err: %v", query, err)
+		return nil, err
 	}
-	return formatCars(cars)
+	return formatCars(cars), nil
 }
 
 func formatCar(target Car) Car {

@@ -21,7 +21,7 @@ type Car struct {
 	Coe             int    `db:"coe"`
 	RoadTax         int    `db:"road_tax"`
 	DeregValue      int    `db:"dereg_value"`
-	Mileage         int    `db:"mileage"`
+	Mileage         int64  `db:"mileage"`
 	Omv             int    `db:"omv"`
 	Arf             int    `db:"arf"`
 	OpcScheme       string `db:"opc_scheme"`
@@ -30,15 +30,24 @@ type Car struct {
 	Features        string `db:"features"`
 	Accessories     string `db:"accessories"`
 	IndicativePrice int    `db:"indicative_price"`
-	Price           int    `db:"price"`
+	Price           int64  `db:"price"`
 }
+
+type TransmissionTypeEnum string
+
+const (
+	TransmissionTypeEnum_Auto   TransmissionTypeEnum = "auto"
+	TransmissionTypeEnum_Manual TransmissionTypeEnum = "manual"
+)
+
+type OrderByConditionsEnum string
 
 type CarParams struct {
 	Title           string
 	ManufacturedMax int
 	ManufacturedMin int
 	TypeOfVehicle   string
-	Transmission    string
+	Transmission    TransmissionTypeEnum
 	PriceMax        int
 	PriceMin        int
 	OrderBy         string

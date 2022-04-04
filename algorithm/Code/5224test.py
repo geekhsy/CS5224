@@ -54,7 +54,7 @@ def predict(x_str):
     return Y_final['Predicted'][0]
 
 if __name__ == '__main__':
-    # print('ourput',sys.argv[1])
+    # print('output: ',sys.argv[1])
     price = predict(sys.argv[1])
     print(price)
     # sys.exit(price)

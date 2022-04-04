@@ -2,9 +2,12 @@ package handlers
 
 import (
 	"CS5224/biz/model"
+	"CS5224/dao"
+	"CS5224/dao/redis"
 	"CS5224/pkg/log"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 )
 
 type AddCarsRequest struct {
@@ -42,7 +45,27 @@ func AddCars(context *gin.Context) {
 		return
 	}
 	log.Logger.Infof("req is: %+v", req)
-	// todo: some logic
+	key := redis.GenCarKey("123")
+	// prevent concurrent insert
+	if success, err := redis.Client.SetNX(key, 1, time.Minute*1).Result(); err != nil || !success {
+		context.JSON(http.StatusOK, gin.H{
+			"status": "service busy",
+		})
+		return
+	}
+	car := dao.Car{
+		Title:        req.Cars[0].Title,
+		Model:        req.Cars[0].Model,
+		Manufactured: req.Cars[0].ProductionYear,
+		Mileage:      req.Cars[0].Mileage,
+		Price:        req.Cars[0].Price,
+	}
+	if err := dao.InsertCar(&car); err != nil {
+		context.JSON(http.StatusOK, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 	resp := AddCarResponse{}
 	context.JSON(http.StatusOK, resp)
 	return
