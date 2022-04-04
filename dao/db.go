@@ -45,6 +45,18 @@ func GetCarByID(id int) Car {
 	return formatCar(car)
 }
 
+func InsertCar(car *Car) error {
+	query := fmt.Sprintf("insert into car (listing_id, title, model, description, original_reg_date,"+
+		" transmission, mileage, features, indicative_price, price) values (%v, %v, %v, %v, %v, %v, %v, %v, %v, %v)",
+		car.ListingID, car.Title, car.Model, car.Description, car.OriginalRegDate,
+		car.Transmission, car.Mileage, car.Features, car.IndicativePrice, car.Price)
+	if res, err := rds.db.Exec(query); !res || err != nil {
+		log.Logger.Info("Query failed : %s, err: %v", query, err)
+		return err
+	}
+	return nil
+}
+
 func SearchCar(params *CarParams) ([]Car, error) {
 	cars := make([]Car, 0)
 	query := "select * from car where 1=1"
