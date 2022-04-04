@@ -87,7 +87,7 @@ func main() {
 	xdata = strings.Replace(xdata, "'", "", -1)
 
 	// predict
-	predict_cmd := fmt.Sprintf("python3 5224test.py '%s'", xdata)
+	predict_cmd := fmt.Sprintf("cd algorithm/Code/ && python3 5224test.py '%s' ", xdata)
 	fmt.Println("str = " + predict_cmd)
 	// fmt.Println("xdata" + xdata)
 	// cmd = exec.Command("powershell", str)
@@ -97,27 +97,26 @@ func main() {
 		fmt.Println("err: " + err.Error())
 	}
 	fmt.Println("The price is", string(price))
-
 	//recommend
-	recommend_cmd := fmt.Sprintf("python3 5224rectest.py '%s' 5", xdata)
-	fmt.Println("str = " + recommend_cmd)
-	// fmt.Println("xdata" + xdata)
-	// cmd = exec.Command("powershell", str)
-	cmd = exec.Command("bash", "-c", recommend_cmd)
-	result, err := cmd.Output()
-	if err != nil {
-		fmt.Println("err: " + err.Error())
-	}
-	cars := make([]xtest, 0)
-
-	fmt.Println("The result is: ", string(result))
-	fmt.Println("------------------------------")
-	err = json.Unmarshal(result, &cars)
-	if err != nil {
-		fmt.Printf("error is: %s", err.Error())
-	} else {
-		fmt.Printf("cars are: %+v", cars)
-	}
+	//recommend_cmd := fmt.Sprintf("python3 5224rectest.py '%s' 5", xdata)
+	//fmt.Println("str = " + recommend_cmd)
+	//// fmt.Println("xdata" + xdata)
+	//// cmd = exec.Command("powershell", str)
+	//cmd = exec.Command("bash", "-c", recommend_cmd)
+	//result, err := cmd.Output()
+	//if err != nil {
+	//	fmt.Println("err: " + err.Error())
+	//}
+	//cars := make([]xtest, 0)
+	//
+	//fmt.Println("The result is: ", string(result))
+	//fmt.Println("------------------------------")
+	//err = json.Unmarshal(result, &cars)
+	//if err != nil {
+	//	fmt.Printf("error is: %s", err.Error())
+	//} else {
+	//	fmt.Printf("cars are: %+v", cars)
+	//}
 }
 
 // '{\"listing_id\":123456,\"title\":\"test\",\"make\":\"\",\"model\":\"\",\"description\":\"ownerconsignmentunit,viewingstrictlybyappostringmentonly.pristineconditionwithlotsofupgradesdone.viewtobelieve!optiontopurchasewithoutcoe.flexibleloansolutions!call/whatsappoursalesconsultantnowtoarrangeforaviewingbeforeitsgone!\",\"manufactured\":2012,\"original_reg_date\":\"\",\"reg_date\":12,\"type_of_vehicle\":\"suv\",\"category\":\"\",\"transmission\":\"\",\"curb_weight\":0,\"power\":0,\"fuel_type\":\"\",\"engine_cap\":0,\"no_of_owners\":1,\"depreciation\":0,\"coe\":0,\"road_tax\":0,\"dereg_value\":0,\"mileage\":0,\"omv\":0,\"arf\":0,\"opc_scheme\":\"\",\"lifespan\":\"\",\"eco_category\":\"\",\"features\":\"smoothinline63.0lturbon55engine,highspecificationunit.viewspecsofthebmwx6\",\"accessories\":\"20''staggeredmrims,carbonsteeringwheel,10''andriodheadunit,hamannwidebodykit,kwcoilover,bmstuned.\",\"indicative_price\":0}'

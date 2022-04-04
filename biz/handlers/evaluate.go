@@ -64,7 +64,7 @@ func EvaluateCar(context *gin.Context) {
 	}
 	args := json.ToString(originalCar)
 	args = strings.Replace(args, "'", "", -1)
-	evaluateCmd := fmt.Sprintf("python3 algorithm/Code/5224test.py '%s'", args)
+	evaluateCmd := fmt.Sprintf("cd algorithm/Code/ && python3 5224test.py '%s'", args)
 	log.Logger.Infof("command is: %s", evaluateCmd)
 	cmd := exec.Command("bash", "-c", evaluateCmd)
 	result, err := cmd.Output()
