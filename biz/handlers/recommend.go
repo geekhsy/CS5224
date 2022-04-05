@@ -13,7 +13,35 @@ import (
 )
 
 type RecommendCarsRequest struct {
-	CarID int64 `json:"car_id"`
+	Title           string `json:"title"`
+	Make            string `json:"make"`
+	Model           string `json:"model"`
+	Description     string `json:"description"`
+	Manufactured    string `json:"manufactured"`
+	OriginalRegDate string `json:"original_reg_date"`
+	RegDate         string `json:"reg_date"`
+	TypeOfVehicle   string `json:"type_of_vehicle"`
+	Category        string `json:"category"`
+	Transmission    string `json:"transmission"`
+	CurbWeight      int    `json:"curb_weight"`
+	Power           int    `json:"power"`
+	FuelType        string `json:"fuel_type"`
+	EngineCap       int    `json:"engine_cap"`
+	NoOfOwners      int    `json:"no_of_owners"`
+	Depreciation    int    `json:"depreciation"`
+	Coe             int    `json:"coe"`
+	RoadTax         int    `json:"road_tax"`
+	DeregValue      int    `json:"dereg_value"`
+	Mileage         int64  `json:"mileage"`
+	Omv             int    `json:"omv"`
+	Arf             int    `json:"arf"`
+	OpcScheme       string `json:"opc_scheme"`
+	Lifespan        string `json:"lifespan"`
+	EcoCategory     string `json:"eco_category"`
+	Features        string `json:"features"`
+	Accessories     string `json:"accessories"`
+	IndicativePrice int    `json:"indicative_price"`
+	Price           int64  `json:"price"`
 }
 
 type RecommendCarsResponse struct {
@@ -37,38 +65,7 @@ func RecommendCars(context *gin.Context) {
 		return
 	}
 	log.Logger.Infof("req is: %+v", req)
-	originalCar := dao.Car{
-		ListingID:       123456,
-		Title:           "test",
-		Make:            "",
-		Model:           "",
-		Description:     "ownerconsignmentunit, viewingstrictlybyappostringmentonly. pristineconditionwithlotsof upgradesdone. viewtobelieve!optiontopurchasewithout coe. flexible loan solutions! call/whatsapp our sales consultant now to arrange for a viewing before it's gone!",
-		Manufactured:    "2012",
-		OriginalRegDate: "",
-		RegDate:         "2012-6-27",
-		TypeOfVehicle:   "suv",
-		Category:        "",
-		Transmission:    "",
-		CurbWeight:      0,
-		Power:           0,
-		FuelType:        "",
-		EngineCap:       0,
-		NoOfOwners:      1,
-		Depreciation:    0,
-		Coe:             0,
-		RoadTax:         0,
-		DeregValue:      0,
-		Mileage:         0,
-		Omv:             0,
-		Arf:             0,
-		OpcScheme:       "",
-		Lifespan:        "",
-		EcoCategory:     "",
-		Features:        "smooth inline 6 3.0l turbo n55 engine, high specification unit. view specs of the bmw x6",
-		Accessories:     "20'' staggered m rims, carbon steering wheel, 10'' andriod headunit, hamann wide bodykit, kw coilover, bms tuned.",
-		IndicativePrice: 0,
-	}
-	args := json.ToString(originalCar)
+	args := json.ToString(req)
 	args = strings.Replace(args, "'", "", -1)
 	recommendCmd := fmt.Sprintf("cd algorithm/Code/ && python3 5224rectest.py '%s' 5", args)
 	log.Logger.Infof("command is: %s", recommendCmd)
