@@ -67,7 +67,7 @@ func RecommendCars(context *gin.Context) {
 	log.Logger.Infof("req is: %+v", req)
 	args := json.ToString(req)
 	args = strings.Replace(args, "'", "", -1)
-	recommendCmd := fmt.Sprintf("cd algorithm/Code/ && python3 5224rectest.py '%s' 5", args)
+	recommendCmd := fmt.Sprintf("cd algorithm/ && python3 5224rectest.py '%s' 5", args)
 	log.Logger.Infof("command is: %s", recommendCmd)
 	cmd := exec.Command("bash", "-c", recommendCmd)
 	var (
